@@ -2,6 +2,10 @@
 
 Node.js/Express REST API for the SSP Books course buying platform with PostgreSQL.
 
+![Project Architecture](SonarQ.png)
+![Project Architecture](images/AzureD.png)
+
+
 ## 📋 API Endpoints
 
 | Method | Endpoint | Description | Auth |
