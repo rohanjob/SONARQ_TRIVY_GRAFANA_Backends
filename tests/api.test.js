@@ -2,8 +2,75 @@
 // SSP Books Backend - API Tests
 // =============================================
 
+process.env.NODE_ENV = 'test';
+
+jest.mock('../src/config/database', () => ({
+  query: jest.fn(),
+  getClient: jest.fn(),
+}));
+
 const request = require('supertest');
+const { query } = require('../src/config/database');
 const app = require('../src/server');
+
+const mockCourses = [
+  {
+    id: 1,
+    title: 'Node.js Fundamentals',
+    slug: 'nodejs-fundamentals',
+    price: '49.99',
+    is_featured: true,
+  },
+];
+
+const mockCategories = [
+  {
+    id: 1,
+    name: 'Programming',
+    slug: 'programming',
+    course_count: 1,
+  },
+];
+
+beforeEach(() => {
+  query.mockReset();
+  query.mockImplementation(async (sql) => {
+    const normalizedSql = sql.replace(/\s+/g, ' ').trim();
+
+    if (normalizedSql.includes('SELECT COUNT(*) as total') && normalizedSql.includes('FROM courses c')) {
+      return {
+        rows: [{ total: String(mockCourses.length) }],
+        rowCount: 1,
+      };
+    }
+
+    if (normalizedSql.includes('FROM courses c') && normalizedSql.includes('WHERE c.is_featured = TRUE')) {
+      return {
+        rows: mockCourses.filter((course) => course.is_featured),
+        rowCount: mockCourses.length,
+      };
+    }
+
+    if (normalizedSql.includes('FROM categories cat')) {
+      return {
+        rows: mockCategories,
+        rowCount: mockCategories.length,
+      };
+    }
+
+    if (normalizedSql.includes('FROM courses c')) {
+      return {
+        rows: mockCourses,
+        rowCount: mockCourses.length,
+      };
+    }
+
+    return {
+      rows: [],
+      rowCount: 0,
+    };
+  });
+});
 
 describe('SSP Books API', () => {
   // Health Check
