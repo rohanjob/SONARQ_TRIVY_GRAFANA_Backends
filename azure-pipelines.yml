@@ -47,7 +47,7 @@ stages:
             displayName: 'Run ESLint'
             continueOnError: true
 
-          - script: npm test
+          - script: npm test -- --reporters=default --reporters=jest-junit
             displayName: 'Run Unit Tests'
             env:
               NODE_ENV: test
@@ -90,10 +90,21 @@ stages:
           - script: npm ci --legacy-peer-deps
             displayName: 'Install Dependencies'
 
+          - script: npm test
+            displayName: 'Generate Coverage For SonarQube'
+            env:
+              NODE_ENV: test
+              DB_HOST: localhost
+              DB_PORT: 5432
+              DB_NAME: ssp_books_test
+              DB_USER: postgres
+              DB_PASSWORD: postgres
+              JWT_SECRET: test_jwt_secret
+
           - task: SonarQubePrepare@8
             displayName: 'Prepare SonarQube Analysis'
             inputs:
-              SonarQube: 'SonarQube-Service'
+              SonarQube: 'SonarQube-B'
               scannerMode: 'CLI'
               configMode: 'manual'
               cliProjectKey: 'ssp_books_backend'
@@ -101,7 +112,6 @@ stages:
               cliSources: 'src'
               extraProperties: |
                 sonar.javascript.lcov.reportPaths=coverage/lcov.info
-                sonar.testExecutionReportPaths=test-report.xml
                 sonar.tests=tests
                 sonar.test.inclusions=**/*.test.js
                 sonar.exclusions=node_modules/**,coverage/**
