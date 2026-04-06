@@ -3,14 +3,14 @@
 // =============================================
 
 const { Pool } = require('pg');
-require('dotenv').config();
+const { getEnv, getIntEnv } = require('./env');
 
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT, 10) || 5432,
-  database: process.env.DB_NAME || 'ssp_books',
-  user: process.env.DB_USER || 'ssp_admin',
-  password: process.env.DB_PASSWORD || 'sspbooks2026',
+  host: getEnv('DB_HOST', 'localhost'),
+  port: getIntEnv('DB_PORT', 5432),
+  database: getEnv('DB_NAME'),
+  user: getEnv('DB_USER'),
+  password: getEnv('DB_PASSWORD'),
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,

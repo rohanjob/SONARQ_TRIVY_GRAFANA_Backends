@@ -3,9 +3,9 @@
 // =============================================
 
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const { getEnv } = require('../config/env');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'ssp_books_jwt_secret_key_2026_secure';
+const JWT_SECRET = getEnv('JWT_SECRET');
 
 /**
  * Authenticate JWT token from Authorization header

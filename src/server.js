@@ -7,7 +7,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config();
+const { getEnv, getIntEnv } = require('./config/env');
 
 const authRoutes = require('./routes/auth');
 const courseRoutes = require('./routes/courses');
@@ -17,15 +17,15 @@ const orderRoutes = require('./routes/orders');
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const PUBLIC_API_URL = process.env.PUBLIC_API_URL || 'http://20.24.192.145:5000/api';
+const PORT = getIntEnv('PORT', 5000);
+const PUBLIC_API_URL = getEnv('PUBLIC_API_URL', `http://localhost:${PORT}/api`);
 
 // =============================================
 // Security Middleware
 // =============================================
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: getEnv('CORS_ORIGIN', 'http://localhost:3000'),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -33,8 +33,8 @@ app.use(cors({
 
 // Rate Limiting
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 15 * 60 * 1000,
-  max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
+  windowMs: getIntEnv('RATE_LIMIT_WINDOW_MS', 15 * 60 * 1000),
+  max: getIntEnv('RATE_LIMIT_MAX', 100),
   standardHeaders: true,
   legacyHeaders: false,
   message: {

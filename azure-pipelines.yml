@@ -35,6 +35,9 @@ stages:
       - job: BuildAndTest
         displayName: 'Install, Lint, Test'
         steps:
+          - checkout: self
+            fetchDepth: 0
+
           - task: NodeTool@0
             displayName: 'Install Node.js $(nodeVersion)'
             inputs:
@@ -82,6 +85,9 @@ stages:
       - job: SonarAnalysis
         displayName: 'Run SonarQube Scanner'
         steps:
+          - checkout: self
+            fetchDepth: 0
+
           - task: NodeTool@0
             displayName: 'Install Node.js $(nodeVersion)'
             inputs:
@@ -114,7 +120,7 @@ stages:
                 sonar.javascript.lcov.reportPaths=coverage/lcov.info
                 sonar.tests=tests
                 sonar.test.inclusions=**/*.test.js
-                sonar.exclusions=node_modules/**,coverage/**
+                sonar.exclusions=node_modules/**,coverage/**,tests/**
                 sonar.sourceEncoding=UTF-8
 
           - task: Bash@3
