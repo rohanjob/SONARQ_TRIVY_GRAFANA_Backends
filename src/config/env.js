@@ -4,10 +4,12 @@
 
 require('dotenv').config();
 
-const getEnv = (name, fallback) => {
+const hasValue = (value) => value !== undefined && value !== '';
+
+const resolveEnvValue = (name, fallback) => {
   const value = process.env[name];
 
-  if (value !== undefined && value !== '') {
+  if (hasValue(value)) {
     return value;
   }
 
@@ -18,18 +20,17 @@ const getEnv = (name, fallback) => {
   throw new Error(`Missing required environment variable: ${name}`);
 };
 
+const getEnv = (name, fallback) => resolveEnvValue(name, fallback);
+
 const getIntEnv = (name, fallback) => {
-  const value = process.env[name];
+  const value = resolveEnvValue(name, fallback);
+  const parsedValue = typeof value === 'number' ? value : parseInt(value, 10);
 
-  if (value !== undefined && value !== '') {
-    return parseInt(value, 10);
+  if (Number.isNaN(parsedValue)) {
+    throw new Error(`Environment variable ${name} must be an integer.`);
   }
 
-  if (fallback !== undefined) {
-    return fallback;
-  }
-
-  throw new Error(`Missing required environment variable: ${name}`);
+  return parsedValue;
 };
 
 module.exports = {
