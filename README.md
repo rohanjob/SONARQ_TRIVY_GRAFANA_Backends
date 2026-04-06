@@ -5,6 +5,10 @@ Node.js/Express REST API for the SSP Books course buying platform with PostgreSQ
 ![Project Architecture](images/SonarQ.png)
 ![Project Architecture](images/AzureD.png)
 
+##❌❌Errors or Failures :
+![Project Architecture](images/Azure Thresold Fail.png)
+![Project Architecture](images/Quality Below - 80%.png)
+![Project Architecture](images/Quality Fails.png)
 
 ## 📋 API Endpoints
 
