@@ -147,7 +147,7 @@ stages:
   # =============================================
   # Stage 3: Build Docker Image
   # =============================================
-  - stage: Build
+  - stage: DockerBuild
     displayName: 'Build Docker Image'
     dependsOn: CodeQuality
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
