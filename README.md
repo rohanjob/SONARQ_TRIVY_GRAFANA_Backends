@@ -6,6 +6,7 @@ Node.js/Express REST API for the SSP Books course buying platform with PostgreSQ
 ![Project Architecture](images/AzureD.png)
 ## 🚀Trivy
 ![Project Architecture](images/Trivy.png)
+![Project Architecture](images/TrivyRUN.png)
 
 ##❌❌Errors or Failures :
 
